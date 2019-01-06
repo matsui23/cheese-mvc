@@ -1,12 +1,22 @@
 package org.launchcode.models;
 
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Created by LaunchCode
  */
+
+@Entity
 public class Cheese {
+
+    @Id
+    @GeneratedValue
+    private int id;
 
     @NotNull
     @Size(min=3, max=15)
@@ -16,30 +26,23 @@ public class Cheese {
     @Size(min=1, message = "Description must not be empty")
     private String description;
 
-    private CheeseType type;
+    @ManyToOne
+    private Category category;
 
-    private int cheeseId;
-    private static int nextId = 1;
+    //@Cascade()
+    @ManyToMany(mappedBy = "cheeses")
+    private List<Menu> menus;
 
     public Cheese(String name, String description) {
-        this();
         this.name = name;
         this.description = description;
     }
 
-    public Cheese() {
-        cheeseId = nextId;
-        nextId++;
-    }
+    public Cheese() {}
 
-    public int getCheeseId() {
-        return cheeseId;
+    public int getId() {
+        return id;
     }
-
-    public void setCheeseId(int cheeseId) {
-        this.cheeseId = cheeseId;
-    }
-
     public String getName() {
         return name;
     }
@@ -56,11 +59,11 @@ public class Cheese {
         this.description = description;
     }
 
-    public CheeseType getType() {
-        return type;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setType(CheeseType type) {
-        this.type = type;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
